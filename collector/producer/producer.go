@@ -4,22 +4,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/introbond/lab-go-kafka/constants"
 )
 
 func getKafkaConfig() kafka.ConfigMap {
-	bootstrapServers := os.Getenv("CLOUDKARAFKA_BROKERS")
-	username := os.Getenv("CLOUDKARAFKA_USERNAME")
-	password := os.Getenv("CLOUDKARAFKA_PASSWORD")
 
 	return kafka.ConfigMap{
-		"bootstrap.servers": bootstrapServers,
-		"security.protocol": "SASL_SSL",
-		"sasl.mechanism":    "SCRAM-SHA-512",
-		"sasl.username":     username,
-		"sasl.password":     password,
+		"bootstrap.servers": constants.KafkaBootstrapServers,
+		"security.protocol": constants.KafkaSecureProtocol,
+		"sasl.mechanism":    constants.KafkaSaslMech,
+		"sasl.username":     constants.KafkaUsername,
+		"sasl.password":     constants.KafkaPassword,
 	}
 }
 
