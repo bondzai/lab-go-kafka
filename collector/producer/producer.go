@@ -9,8 +9,10 @@ import (
 	"github.com/introbond/lab-go-kafka/constants"
 )
 
-func getKafkaConfig() kafka.ConfigMap {
+// Add more supported cryptocurrencies
+var supportedCryptos = []string{"bitcoin", "ethereum", "the-graph"}
 
+func getKafkaConfig() kafka.ConfigMap {
 	return kafka.ConfigMap{
 		"bootstrap.servers": constants.KafkaBootstrapServers,
 		"security.protocol": constants.KafkaSecureProtocol,
@@ -45,10 +47,16 @@ type CoinGeckoPriceResponse struct {
 	Bitcoin struct {
 		Usd float64 `json:"usd"`
 	} `json:"bitcoin"`
+	Ethereum struct {
+		Usd float64 `json:"usd"`
+	} `json:"ethereum"`
+	TheGraph struct {
+		Usd float64 `json:"usd"`
+	} `json:"the-graph"`
 }
 
-func FetchBitcoinPrice() (float64, error) {
-	coinGeckoURL := "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+func FetchCryptoPrice(cryptoName string) (float64, error) {
+	coinGeckoURL := fmt.Sprintf("https://api.coingecko.com/api/v3/simple/price?ids=%s&vs_currencies=usd", cryptoName)
 	resp, err := http.Get(coinGeckoURL)
 	if err != nil {
 		return 0, err
@@ -64,10 +72,35 @@ func FetchBitcoinPrice() (float64, error) {
 		return 0, err
 	}
 
-	return priceResponse.Bitcoin.Usd, nil
+	switch cryptoName {
+	case "bitcoin":
+		return priceResponse.Bitcoin.Usd, nil
+	case "ethereum":
+		return priceResponse.Ethereum.Usd, nil
+	case "the-graph":
+		return priceResponse.TheGraph.Usd, nil
+	default:
+		return 0, fmt.Errorf("unsupported cryptocurrency: %s", cryptoName)
+	}
 }
 
-func ProduceBitcoinPriceMessage(topic string, priceUSD float64) error {
-	message := fmt.Sprintf("Bitcoin price in USD: %.2f", priceUSD)
-	return ProduceMessage(topic, message)
+func ProduceCryptoPriceMessages(topic string) error {
+
+	for _, crypto := range supportedCryptos {
+		price, err := FetchCryptoPrice(crypto)
+		if err != nil {
+			fmt.Printf("Error fetching %s price: %s\n", crypto, err)
+			continue
+		}
+
+		message := fmt.Sprintf("%s price in USD: %.2f", crypto, price)
+		err = ProduceMessage(topic, message)
+		if err != nil {
+			fmt.Printf("Error producing message for %s: %s\n", crypto, err)
+		} else {
+			fmt.Printf("%s price fetched and produced to Kafka: %.2f USD\n", crypto, price)
+		}
+	}
+
+	return nil
 }
