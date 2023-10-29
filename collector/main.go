@@ -12,7 +12,7 @@ import (
 func main() {
 	topic := os.Getenv("CLOUDKARAFKA_TOPIC_PREFIX")
 
-	producerTicker := time.NewTicker(300 * time.Second)
+	producerTicker := time.NewTicker(3 * time.Second)
 
 	go func() {
 		err := consumer.ConsumeMessages(topic)
@@ -47,6 +47,5 @@ func fetchAndProduceBitcoinPrice(topic string) error {
 		return err
 	}
 
-	fmt.Printf("Bitcoin price fetched and produced to Kafka: %.2f USD\n", priceUSD)
 	return nil
 }
