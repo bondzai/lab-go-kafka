@@ -19,17 +19,21 @@ func main() {
 		//"debug":                           "generic,broker,security",
 	}
 	topic := os.Getenv("CLOUDKARAFKA_TOPIC_PREFIX") + ".test"
+	fmt.Println(topic)
+
 	p, err := kafka.NewProducer(config)
+
 	if err != nil {
 		fmt.Printf("Failed to create producer: %s\n", err)
 		os.Exit(1)
 	}
+
 	fmt.Printf("Created Producer %v\n", p)
 	deliveryChan := make(chan kafka.Event)
 
 	for i := 0; i < 10; i++ {
 		value := fmt.Sprintf("[%d] Hello Go!", i+1)
-		err = p.Produce(&kafka.Message{TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny}, Value: []byte(value)}, deliveryChan)
+		_ = p.Produce(&kafka.Message{TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny}, Value: []byte(value)}, deliveryChan)
 		e := <-deliveryChan
 		m := e.(*kafka.Message)
 		if m.TopicPartition.Error != nil {
