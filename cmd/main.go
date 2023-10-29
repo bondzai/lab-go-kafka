@@ -12,7 +12,7 @@ import (
 func main() {
 	topic := os.Getenv("CLOUDKARAFKA_TOPIC_PREFIX")
 
-	ticker := time.NewTicker(10 * time.Second)
+	producerTicker := time.NewTicker(300 * time.Second)
 
 	go func() {
 		err := consumer.ConsumeMessages(topic)
@@ -22,7 +22,7 @@ func main() {
 	}()
 
 	go func() {
-		for range ticker.C {
+		for range producerTicker.C {
 			err := fetchAndProduceBitcoinPrice(topic)
 			if err != nil {
 				fmt.Printf("Producer error: %s\n", err)
@@ -40,7 +40,9 @@ func fetchAndProduceBitcoinPrice(topic string) error {
 		return err
 	}
 
-	err = producer.ProduceMessage(topic, fmt.Sprintf("Bitcoin price in USD: %.2f", priceUSD))
+	message := fmt.Sprintf("%d - Bitcoin price in USD: %.2f", time.Now().Unix(), priceUSD)
+
+	err = producer.ProduceMessage(topic, message)
 	if err != nil {
 		return err
 	}
