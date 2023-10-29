@@ -7,19 +7,8 @@ import (
 	"github.com/introbond/lab-go-kafka/constants"
 )
 
-func getKafkaConfig() kafka.ConfigMap {
-
-	return kafka.ConfigMap{
-		"bootstrap.servers": constants.KafkaBootstrapServers,
-		"security.protocol": constants.KafkaSecureProtocol,
-		"sasl.mechanism":    constants.KafkaSaslMech,
-		"sasl.username":     constants.KafkaUsername,
-		"sasl.password":     constants.KafkaPassword,
-	}
-}
-
 func ConsumeMessages(topic string) error {
-	config := getKafkaConfig()
+	config := constants.GetKafkaConfig()
 	config["group.id"] = topic
 	config["auto.offset.reset"] = "earliest"
 

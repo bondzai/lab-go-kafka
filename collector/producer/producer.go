@@ -9,21 +9,10 @@ import (
 	"github.com/introbond/lab-go-kafka/constants"
 )
 
-// Add more supported cryptocurrencies
 var supportedCryptos = []string{"bitcoin", "ethereum", "the-graph"}
 
-func getKafkaConfig() kafka.ConfigMap {
-	return kafka.ConfigMap{
-		"bootstrap.servers": constants.KafkaBootstrapServers,
-		"security.protocol": constants.KafkaSecureProtocol,
-		"sasl.mechanism":    constants.KafkaSaslMech,
-		"sasl.username":     constants.KafkaUsername,
-		"sasl.password":     constants.KafkaPassword,
-	}
-}
-
 func ProduceMessage(topic, message string) error {
-	config := getKafkaConfig()
+	config := constants.GetKafkaConfig()
 
 	producer, err := kafka.NewProducer(&config)
 	if err != nil {
