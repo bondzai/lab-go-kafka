@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	"github.com/introbond/lab-go-kafka/constants"
+	"github.com/zenithero/lab-go-kafka/constants"
 )
 
 var supportedCryptos = []string{"bitcoin", "ethereum", "the-graph"}

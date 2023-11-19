@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	"github.com/introbond/lab-go-kafka/constants"
+	"github.com/zenithero/lab-go-kafka/constants"
 )
 
 func ConsumeMessages(topic string) error {

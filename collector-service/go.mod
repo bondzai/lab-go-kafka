@@ -1,4 +1,4 @@
-module github.com/introbond/lab-go-kafka
+module github.com/zenithero/lab-go-kafka
 
 go 1.20
 

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/introbond/lab-go-kafka/constants"
-	"github.com/introbond/lab-go-kafka/consumer"
-	"github.com/introbond/lab-go-kafka/producer"
+	"github.com/zenithero/lab-go-kafka/constants"
+	"github.com/zenithero/lab-go-kafka/consumer"
+	"github.com/zenithero/lab-go-kafka/producer"
 )
 
 func main() {
