@@ -1,14 +1,14 @@
 {{template "base" .}}
 
 {{define "content" }}
-    <div class="container">
+    <div class="container bg-dark text-light">
         <div class="row">
             <div class="col">
-                <h1 class="mt-5">Test microservices</h1>
-                <hr>
-                <a id="brokerBtn" class="btn btn-outline-secondary" href="javascript:void(0);">Test Broker</a>
+                <h1 class="mt-5">Test Microservices</h1>
+                <hr class="bg-light">
+                <a id="brokerBtn" class="btn btn-outline-primary mt-3">Test Broker</a>
 
-                <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
+                <div id="output" class="mt-5 p-4 border border-white rounded">
                     <span class="text-muted">Output shows here...</span>
                 </div>
             </div>
@@ -16,13 +16,13 @@
         <div class="row">
             <div class="col">
                 <h4 class="mt-5">Sent</h4>
-                <div class="mt-1" style="outline: 1px solid silver; padding: 2em;">
+                <div class="mt-1 p-4 border border-white rounded">
                     <pre id="payload"><span class="text-muted">Nothing sent yet...</span></pre>
                 </div>
             </div>
             <div class="col">
                 <h4 class="mt-5">Received</h4>
-                <div class="mt-1" style="outline: 1px solid silver; padding: 2em;">
+                <div class="mt-1 p-4 border border-white rounded">
                     <pre id="received"><span class="text-muted">Nothing received yet...</span></pre>
                 </div>
             </div>
@@ -35,7 +35,7 @@
     let brokerBtn = document.getElementById("brokerBtn");
     let output = document.getElementById("output");
     let sent = document.getElementById("payload");
-    let recevied = document.getElementById("received");
+    let received = document.getElementById("received");
 
     brokerBtn.addEventListener("click", function() {
 
@@ -55,7 +55,7 @@
             }
         })
         .catch((error) => {
-            output.innerHTML += "<br><br>Eror: " + error;
+            output.innerHTML += "<br><br>Error: " + error;
         })
     })
         
